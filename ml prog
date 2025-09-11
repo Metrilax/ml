@@ -1,0 +1,452 @@
+Design a Python program to analyse the student performance data across multiple subjects. The program should allow users to get the input data for a specified number of students, including their names, ages, and scores in Math, Science, Physics, and Chemistry. Based on this data, the program will calculate and display various statistics:
+Data Analysis Objectives:
+Overall Average Score: Computes the average score across all students.
+• Top Students: Finds and displays the top-performing students.
+• Filtering: Allows filtering of students by age and subject scores.
+import numpy as np # Importing numpy library for numerical operations
+# Function to initialize student data interactively
+def initialize_student_data(num_students):
+student_data = [] # Initialize an empty list to store student data
+for i in range(num_students): # Loop to gather data for each student
+name = input(f"Get the student's name for Student {i+1}: ") # Get the student's name
+age = int(input(f'Get the age for {name}: ") # Get the age for the student
+math score = float(input(f"Get the Math score for {name}: ")) # Get the Math score
+science_score = float(input(f'Get the Science score for {name}: ")) # Get the Science score
+physics_score = float(input(f"Get the Physics score for (name): ")) # Get the Physics score
+chemistry_score = float(input(f"Get the Chemistry score for {name): ")) # Get the Chemistry score
+student_data append[name, age, math_score, science_score, physics_score, chemistry_score]) # Append
+student data to list
+student_data = np.array(student _data) # Convert list of lists to a numpy array
+return student_data # Return numpy array containing student data
+# Function to calculate overall average score
+def calculate _overall _average(student _data):
+scores = student_data[:, 2:].astype(float) # Extract scores from student data and convert to float
+overall _avg = np.mean(scores) # Calculate mean of all scores
+return overall _avg # Return overall average score
+# Function to find top N students based on overall average score
+def top _students _overall(student _data, n):
+scores = student _datal:, 2:] astype(float) # Extract scores from student data and convert to float
+overall _avg_scores = np.mean(scores, axis=1) #Calculate mean score for each student
+top_indices = np.argsort(overall _avg_scores)[:-1][:n] # Get indices of top N students based on scores
+top_students = student data[top _indices] # Get top students based on indices
+return top_students # Return top N students
+# Function to filter students based on criteria (age and score in a specific subject)
+def filter students(student data, min_age, min score, subject="Math'):
+basedien index = (Math: 2, Science: 3, Physies: 4, Chemistry: S subjec) # Determine index of subject
+filtered _students = student _data[(student_data[:, 1].astype(int) >= min _age) &
+(student _datal:, subject _index].astype(float) >= min _score)] # Filter students
+return filtered _ students # Return filtered students
+# Example usage with interactive input
+num _students = int(input("Get the number of students: ")) # Get the number of students
+student _data = initialize_ student_data(num students) # Initialize student data interactively
+print("inInitial Student Data:") # Print header for initial student data print(student_data) # Print initial student data
+print) # Output an empty line (newline) for better readability
+overall avg = calculate _overall _average(student _data) # Calculate overall average score of students
+print(f'Overall Average Score of Students: {overall _avg:2f;") # Print overall average score print) # Output an empty line (newline) for better readability
+top_n = int(input("Get the number of top students to display: ")) # Get the number of top students
+top _students = top_students_overall(student _data, top_n) # Find top N students based on overall average score
+print(f"nTop {top_n} Students based on Overall Average Score:") # Print header for top students print(top_students) # Print top students
+print # Output an empty line (newline) for better readability
+min_age_filter = int(input("Get the minimum age to filter students: ")) # Get the minimum age to filter students
+sore in hyster - oamput Get the minimum score in Physics to fier students:" # Get the minimum
+tered_students = filter _students(student_data, min_age_filter, min_score_filter, subject='Physics) # Fil
+dents based on criter
+For lifer sat aged (min age fiery or older with at least (min score filter) in Physics* + Prin header
+print(filtered_students) # Print filtered students
+min score_filter_chem = float(input("Get the minimum score in Chemistry to filter students: ")) # Get the
+minimum score in Chemistry
+filtered_students_chem = filter_students(student_data, min _age_filter, min_score_filter_chem,
+subject='Chemistry') # Filter students based on criteria
+int(f" nStudents aged {min_age_filter) or older with at least {min_score_filter_chem} in Chemistry:") # Pr ader for filtered studer
+print(filtered _students _chem) # Print filtered students
+
+
+Program 1b
+Develop a machine learning model that accurately classifies iris flowers into one of three species based on their sepal and petal measurements using pandas library
+Objective:
+To build a Decision Tree classifier using the Iris dataset that achieves high accuracy in predicting the species of iris flowers.
+The model should be able to:
+• Accurately Classify Iris Species: Develop a classifier that correctly identifies the species of iris flowers based on their sepal length, sepal width, petal length, and petal width.
+• Evaluate Model Performance: Measure the performance of the classifier using metrics such as accuracy score and confusion matrix.
+# Import necessary libraries and modules
+from sklearn.datasets import load_ iris # To load the Iris dataset import pandas as pd # For data manipulation with DataFrames
+from sklearn.model _selection import train_test_split # For splitting data into training and testing sets
+from sklearn.tree import DecisionTreeClassifier # Import Decision Tree classifier from sklearn.metrics import accuracy_score, confusion_ matrix # Import metrics for evaluation
+# Load the dataset
+iris = load _iris # Load Iris dataset from sklearn
+# iris is a dictionary-like object with data, target, and other attributes
+X= iris.data # Features (independent variables)
+y = iris.target # Target (dependent variable)
+# Convert to DataFrame for easier manipulation and analysis
+df = pd.DataFrame(data=X, columns=iris.feature_names) # Create a DataFrame with feature names as columns
+df['target'] = y # Add a target column to the DataFrame
+missing_values = df.isnull).sum # Check for missing values in the DataFrame
+print("Missing Values =", missing_values) # Print the count of missing values
+# Summary statistics of the dataset
+summary_stats = df.describe) # Generate summary statistics of the DataFrame
+print(summary_stats) # Print the summary statistics
+# Split data into training and test sets
+X_train, X_test, _train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+# Split the data into training (80%) and testing (20%) sets using a fixed random state for reproducibility
+# Initialize the Decision Tree classifier
+clf = DecisionTreeClassifier(random_state=42) # Create a Decision Tree classifier object
+# Fit the classifier on the training data
+clf. fit(X_train, _train) # Train the Decision Tree classifier using the training data
+# Predictions on the test data
+y_pred = clf.predict(X_test) # Use the trained classifier to predict labels on the test set
+# Evaluate the model performance
+# Predictions on the test data
+y_pred = clf.predict(X_test) # Use the trained classifier to predict labels on the test set
+# Evaluate the model performance
+accuracy = accuracy_score(y_test, y_pred) # Compute the accuracy score of the model
+print(f Accuracy: {accuracy}) # Print the accuracy score
+# Compute and display the Confusion Matrix
+conf_matrix = confusion_matrixy_test, y_pred) # Generate confusion matrix
+print(Confusion Matrix:) # Print header for confusion matrix print(conf_matrix) # Print the confusion matrix itself
+
+
+
+Program 2a
+Problem Statement
+Develop a comprehensive Python program to analyze and visualize the Breast Cancer
+Wisconsin dataset using matplotlib. The primary objective of the program is to generate various
+plots to illustrate the distribution of data and the relationships between different attributes of
+the dataset.
+import matplotlib.pyplot as plt # Importing the Matplotlib library for plotting
+import pandas as pd # Importing the Pandas library for data manipulation
+from sklearn.datasets import load_breast_cancer # Importing the Breast Cancer dataset from sklearn
+# Load the breast cancer dataset
+cancer = load_breast_cancer() # Loading the built-in Breast Cancer dataset
+# Convert to pandas DataFrame
+data = pd.DataFrame(cancer.data, columns=cancer.feature_names) # Converting the dataset to a
+pandas DataFrame
+data['target'] = cancer.target # Adding the target column to the DataFrame
+# Display a concise summary of the DataFrame
+print(data.info()) # Displaying a concise summary of the DataFrame, including the number of entries,
+columns, non-null values, and data types
+# Display the first few rows of the dataset
+print(data.head(1)) # Displaying the first few rows of the DataFrame to get an initial look at the data
+# Display basic statistics
+print(data.describe()) # Displaying basic statistical details like mean, std deviation, min, and max
+values for each column
+# Check for any missing values
+print(data.isnull().sum()) # Checking for any missing values in the DataFrame
+# Line Plot
+plt.figure(figsize=(10, 6)) # Setting the figure size for the plot
+plt.plot(data.index, data['mean radius'], label='Mean Radius') # Creating a line plot for the 'mean
+radius' column
+plt.title('Line Plot of Mean Radius') # Adding a title to the plot
+plt.xlabel('Index') # Adding a label to the X-axis
+plt.ylabel('Mean Radius') # Adding a label to the Y-axis
+plt.legend() # Adding a legend to the plot
+plt.grid(True) # Enabling the grid for the plot
+plt.show() # Displaying the plot
+# Scatter Plot
+plt.figure(figsize=(10, 6)) # Setting the figure size for the plot
+plt.scatter(data['mean radius'], data['mean texture'], c=data['target'], cmap='coolwarm', alpha=0.5) #
+Creating a scatter plot with 'mean radius' and 'mean texture', color-coded by the target class
+plt.title('Scatter Plot of Mean Radius vs Mean Texture') # Adding a title to the plot
+plt.xlabel('Mean Radius') # Adding a label to the X-axis
+plt.ylabel('Mean Texture') # Adding a label to the Y-axis
+plt.grid(True) # Enabling the grid for the plot
+plt.show() # Displaying the plot
+# Bar Plot
+plt.figure(figsize=(10, 6)) # Setting the figure size for the plot
+plt.bar(data['target'].value_counts().index, data['target'].value_counts().values) # Creating a bar plot
+for the target class distribution
+plt.title('Bar Plot of Target Class Distribution') # Adding a title to the plot
+plt.xlabel('Target Class') # Adding a label to the X-axis
+plt.ylabel('Count') # Adding a label to the Y-axis
+plt.xticks(ticks=[0, 1], labels=['Malignant', 'Benign']) # Setting the ticks and labels for the X-axis
+plt.grid(True) # Enabling the grid for the plot
+plt.show() # Displaying the plot
+# Histogram
+plt.figure(figsize=(10, 6)) # Setting the figure size for the plot
+plt.hist(data['mean area'], bins=30, alpha=0.7) # Creating a histogram for the 'mean area' column
+with 30 bins
+plt.title('Histogram of Mean Area') # Adding a title to the plot
+plt.xlabel('Mean Area') # Adding a label to the X-axis
+plt.ylabel('Frequency') # Adding a label to the Y-axis
+plt.grid(True) # Enabling the grid for the plot
+plt.show() # Displaying the plot
+# Box Plot
+plt.figure(figsize=(10, 6)) # Setting the figure size for the plot
+plt.boxplot([data[data['target'] == 0]['mean radius'], data[data['target'] == 1]['mean radius']],
+labels=['Malignant', 'Benign']) # Creating a box plot for the 'mean radius' column, grouped by the
+target class
+plt.title('Box Plot of Mean Radius by Target Class') # Adding a title to the plot
+plt.xlabel('Target Class') # Adding a label to the X-axis
+plt.ylabel('Mean Radius') # Adding a label to the Y-axis
+plt.grid(True) # Enabling the grid for the plot
+plt.show() # Displaying the plot
+
+
+Program 2b
+Problem Statement
+Develop a Python program to analyze and visualize the Breast Cancer Wisconsin dataset using
+the seaborn library. The primary objective of this program is to generate a variety of plots that
+help illustrate the distribution, relationships, and patterns within the dataset's attributes.
+import seaborn as sns # Import Seaborn for advanced data visualization
+import pandas as pd # Import Pandas for data manipulation
+import matplotlib.pyplot as plt # Import Matplotlib for plotting
+from sklearn.datasets import load_breast_cancer # Import the Breast Cancer dataset from
+sklearn
+# Load the Breast Cancer Wisconsin dataset
+cancer = load_breast_cancer() # Fetch the dataset from sklearn's built-in datasets
+# Convert the dataset to a pandas DataFrame
+data = pd.DataFrame(cancer.data, columns=cancer.feature_names) # Create a DataFrame with
+feature names as columns
+data['target'] = cancer.target # Add the target column to the DataFrame, which contains the
+class labels
+# Display a concise summary of the DataFrame
+print(data.info()) # Displaying a concise summary of the DataFrame, including the number of
+entries, columns, non-null values, and data types
+# Display the first few rows of the dataset
+print(data.head(1)) # Displaying the first few rows of the DataFrame to get an initial look at
+the data
+# Display basic statistics
+print(data.describe()) # Displaying basic statistical details like mean, std deviation, min, and
+max values for each column
+# Check for any missing values
+print(data.isnull().sum()) # Checking for any missing values in the DataFrame
+# Count Plot
+plt.figure(figsize=(6, 4)) # Set the size of the figure for the plot
+sns.countplot(x='target', data=data, palette='coolwarm') # Create a count plot to visualize the
+number of Malignant vs. Benign cases
+plt.title('Count Plot of Target Classes') # Add a title to the plot
+plt.xlabel('Target Class') # Add a label to the X-axis
+plt.ylabel('Count') # Add a label to the Y-axis
+plt.xticks(ticks=[0, 1], labels=['Malignant', 'Benign']) # Set the ticks and labels for the X-axis
+plt.show() # Display the plot
+# KDE Plot
+plt.figure(figsize=(10, 6)) # Set the size of the figure for the plot
+sns.kdeplot(data=data[data['target'] == 0]['mean radius'], shade=True, label='Malignant',
+color='r') # KDE plot for 'mean radius' for Malignant cases
+sns.kdeplot(data=data[data['target'] == 1]['mean radius'], shade=True, label='Benign',
+color='b') # KDE plot for 'mean radius' for Benign cases
+plt.title('KDE Plot of Mean Radius') # Add a title to the plot
+plt.xlabel('Mean Radius') # Add a label to the X-axis
+plt.ylabel('Density') # Add a label to the Y-axis
+plt.legend() # Add a legend to the plot
+plt.show() # Display the plot
+# Violin Plot
+plt.figure(figsize=(10, 6)) # Set the size of the figure for the plot
+sns.violinplot(x='target', y='mean radius', data=data, palette='coolwarm') # Create a violin plot
+for 'mean radius' by target class
+plt.title('Violin Plot of Mean Radius by Target Class') # Add a title to the plot
+plt.xlabel('Target Class') # Add a label to the X-axis
+plt.ylabel('Mean Radius') # Add a label to the Y-axis
+plt.xticks(ticks=[0, 1], labels=['Malignant', 'Benign']) # Set the ticks and labels for the X-axis
+plt.show() # Display the plot
+# Pair Plot
+sns.pairplot(data, vars=['mean radius', 'mean texture', 'mean perimeter', 'mean area'],
+hue='target', palette='coolwarm') # Create a pair plot for selected features, color-coded by
+target class
+plt.title('Pair Plot') # Add a title to the plot
+plt.show() # Display the plot
+# Heatmap
+plt.figure(figsize=(20, 20)) # Set the size of the figure for the plot
+sns.heatmap(data.corr(), annot=True, fmt='.2f', cmap='coolwarm') # Create a heatmap for the
+correlation matrix of features
+plt.title('Correlation Heatmap') # Add a title to the plot
+plt.show() # Display the plot
+
+Program 3
+P r o b l e m S t a t e m e n t
+The Iris flower dataset, which includes measurements of sepal length, sepal width, petal length,
+and petal width for three Iris species, presents a problem to explore the effectiveness of Linear
+Discriminant Analysis (LDA) for dimensionality reduction in a classification task. The
+problem is to develop a K-Nearest Neighbors (KNN) classifier using the original four-
+dimensional feature space and compare its performance to a KNN classifier trained on a two-
+dimensional feature space obtained through LDA. By evaluating and comparing the accuracy
+of these models, the problem seeks to understand how LDA's dimensionality reduction impacts
+the performance of KNN classification for Iris flower species.
+import pandas as pd # Import Pandas for data manipulation and analysis
+from sklearn.datasets import load _iris # Import the Iris dataset
+from sklearn.model_ selection import train test_split # Import train test_split to split the
+d a t a s e t
+from sklearn.preprocessing import StandardScaler # Import StandardScaler for feature
+scaling
+from sklearn discriminant _analysis import LinearDiscriminantAnalysis as LDA # Import
+LDA for dimensionality reduction
+from sklearn.neighbors import KNeighborsClassifier # Import KNeighborsClassifier for
+classification
+from sklearn.metrics import confusion matrix, accuracy_score # Import metrics for
+evaluating the model
+# Load the Iris dataset
+iris = load_iris # Load the Iris dataset which contains features and target labels
+X = iris.data # Extract feature data from the dataset
+y = iris.target # Extract target labels from the dataset
+feature names = iris.feature _names # Get the names of the features
+# Display the range of values for each attribute before scaling
+print("Range of values before scaling:") # Print statement to show the ranges before scaling
+for i, feature_name in enumerate(feature_names):
+print(f" {feature_name}: {X[:, i].min()} to {X[:, ij.max())}") # Print the min and max
+values for each feature before scaling
+# Split the dataset into a training set and a test set
+X_train, X_test, y_train, _test = train_test_split(X, y, test_size=0.3, random_state=42) #
+Split the data, 70% for training and 30% for testing
+# Initialize the StandardScaler
+scaler = StandardScaler) # Create a StandardScaler object to standardize the data
+# Fit the scaler on the training data and transform the training data
+_train_scaled = scaler.fit_transform(X_train) # Fit the scaler on the training data and
+transform it
+# Transform the test data using the fitted scaler
+_test_scaled = scaler.transform(X _test) # Transform the test data using the same scaler
+# Display the range of values for each attribute after scaling
+print("Range of values after scaling:") # Print statement to show the ranges after scaling
+for i, feature _name in enumerate(feature_names):
+print(f" {feature_ name): (X train scaled[:, il.minO} to [X train scaled[:, il.max0}") #
+Print the min and max values for each feature after scaling
+# Display the original features in the dataset (first 3 rows)
+print("nOriginal Training Data (first 3 rows):") # Print statement to show the first 3 rows of
+the original training data
+print(pd.DataFrame(X_train, columns=feature_names).head(3)) # Convert the first 3 rows of
+the original feature data to a DataFrame and display it
+# Apply LDA for dimensionality reduction
+Ida = LDA(n_components=2) # Initialize LDA with 2 components for dimensionality
+reduction
+X_ train_ Ida = Ida.fit_transform_train_scaled, y_train) # Fit LDA on the scaled training
+data and transform it
+X_test_Ida = Ida.transform(X _test _scaled) # Transform the scaled test data using the fitted
+LDA model
+# Display the features after applying LDA (first 3 rows)
+print("InTraining Data after LDA (first 3 rows):") # Print statement to show the first 3 rows
+of the training data after LDA
+print(pd.DataFrame(X_train_Ida, columns=['LDA Component 1', 'LDA Component
+2']).head(3)) # Convert the first 3 rows of the LDA-transformed data to a DataFrame and
+display it
+# Print the explained variance ratio
+print("nExplained variance ratio:", Ida.explained_variance_ratio_) # Print the proportion of
+variance explained by each LDA component
+# Print the dimensions of the original and transformed datasets
+print("InDimensions of the original dataset:", X_train.shape) # Print the dimensions of the
+training data before LDA
+print("Dimensions of the dataset after LDA:", X _train_ Ida.shape) # Print the dimensions of
+the training data after LDA
+# Train and evaluate a K-Nearest Neighbors classifier on the original 4D features
+knn_original = KNeighborsClassifier(n_neighbors=3) # Initialize KNN with 3 neighbors
+knn_original.fit(X_train_scaled, _train) # Train KNN model on the scaled 4D feature data
+y_pred _original = knn_original.predict(X test_ scaled) # Predict on the test set
+accuracy_original = accuracy_score(y_test, y_pred _original) # Calculate accuracy
+conf matrix original = confusion_matrixy_test, y_pred_original) # Compute confusion
+matrix
+print("InKNN Classifier on Original 4D Features:")
+printf"Accuracy: {accuracy_original::2f,") # Print the accuracy of the KNN model on the
+original features
+print("Confusion Matrix: In", conf_matrix_original) # Print the confusion matrix for the KNN
+model on the original features
+# Train and evaluate a K-Nearest Neighbors classifier on the 2D LDA features
+knn_ Ida = KNeighborsClassifiern_ neighbors=3) # Initialize KNN with 3 neighbors
+knn_Ida.fit(X_ train_Ida, _train) # Train KNN model on the 2D LDA-transformed feature
+data
+y_pred _Ida = knn_Ida.predict(X_test_Ida) # Predict on the test set
+accuracy_Ida = accuracy_score(y_test, y_pred_Ida) # Calculate accuracy
+conf_matrix_Ida = confusion _matrixy_test, _pred _Ida) # Compute confusion matrix
+print("InKNN Classifier on 2D LDA Features:")
+print(f" Accuracy: {accuracy_Ida:.2f,") # Print the accuracy of the KNN model on the LDA
+print("Confusion Matrix:In", conf_matrix _Ida) # Print the confusion matrix for the KNN
+model on the L D A features
+
+Program 4:
+Problem Definition:
+This problem aims to conduct an unsupervised analysis of the Iris dataset using Principal Component Analysis
+(PCA) for dimensionality reduction and K-Means clustering for segmentation. The primary objective is to
+uncover inherent patterns and structures within the dataset that correspond to different species of Iris flowers,
+without relying on explicit species labels.
+import numpy as np # Import the numpy library for numerical operations
+from sklearn.datasets import load iris # Import the load iris function from scikit-learn datasets
+from sklearn.preprocessing import StandardScaler # Import StandardScaler for data standardization
+from sklearn.decomposition import PCA # Import PCA for principal component analysis
+from sklearn.cluster import KMeans # Import KMeans for k-means clustering
+# Step 1: Load the Iris dataset
+iris = load _iris # Load the Iris dataset into the variable iris
+X = iris.data # Extract the features from the Iris dataset
+# Step 2: Standardize the data
+scaler = StandardScaler # Create a StandardScaler object for data standardization
+X_scaled = scaler.fit _transform(X) # Standardize the features and store them in X_ scaled
+# Step 3: Perform PCA
+pca = PCAn_ components=2) # Create a PCA object to reduce the data to 2 principal components
+X_pea = pca.fit_transform(X _scaled) # Apply PCA on the standardized data and store the transformed data in
+X_pca
+# Step 4: Print principal component details
+print("Principal Component Details:") # Print the header for principal component details
+print"inExplained Variance Ratio:", pca.explained_variance_ratio_) # Print the explained variance ratio of each
+principal component
+print"inPrincipal Components:") # Print the header for principal components
+print(pca.components_) # Print the principal components
+# Step 5: Apply K-means clustering on PCA-reduced data
+kmeans = KMeans(n_clusters=3, random_ state-42, n_ init=10) # Create a KMeans object with 3 clusters,
+random state for reproducibility, and 10 initializations
+kmeans.fit(X_pca) # Fit the KMeans algorithm on the PCA-reduced data
+y_kmeans = kmeans.predict(X_pca) # Predict the cluster for each data point and store the cluster labels in
+y_kmeans
+# Step 6: Print cluster centers and cluster sizes
+print("inCluster Centers (in PCA-reduced space):") # Print the header for cluster centers
+for i, center in enumerate(kmeans.cluster _centers ): # Iterate over the cluster centers
+printf'Cluster (i+1}: {center)") # Print the center of each cluster
+print("inCluster Sizes:") # Print the header for cluster sizes
+for i, size in enumerate(np.bincount(y_kmeans)): # Iterate over the sizes of each cluster
+print(f"Cluster {i+1}: {size)") # Print the size of each clust
+
+Programme 5: Classification with support vector machines (SVM)
+P r o b l e m S t a t e m e n t
+The goal of this case study is to predict the quality of red wine based on various physicochemical
+properties using a Support Vector Machine (SVM). The dataset winequality_red.csv contains several
+features such as fixed acidity, volatile acidity, citric acid, and more, as well as a target variable indicating
+the quality rating of the wine on a scale from 0 to 10. Accurate prediction of wine quality can be valuable
+for wine producers and consumers by helping to assess and ensure quality standards.
+import pandas as pd # Import the pandas library for data manipulation
+from sklearn.model_selection import train_test_split # Import function to split data into training and
+testing sets
+from sklearn.preprocessing import StandardScaler # Import StandardScaler to standardize features
+from sklearn.svm import SVC # Import Support Vector Classifier for SVM modeling
+from sklearn metrics import confusion matrix, accuracy _score, precision score, recall _score,
+fl_score # Import various metrics to evaluate the model
+# Load the dataset
+data - pd.read _csv(winequality_red.csv) # Read the dataset from a CSV file into a DataFrame
+# Display the details of the dataset
+print(data.info()) # Print summary information about the DataFrame, including the data types and
+non-null counts of each column
+# Features and target variable
+X = data.drop('quality', axis-1) # Drop the 'quality' column to create the feature set (X) which
+contains all columns except 'quality'
+y = data['quality'] # Create the target variable (y) which contains only the 'quality' column
+# Preprocessing: Standardize the features
+scaler = StandardScaler # Create an instance of StandardScaler
+X scaled = scaler:fit transform(X) # Fit the scaler to the feature data and transform it, standardizing
+the features
+# Split the data into training and testing sets
+X_ train, X_test, y_train, y_test = train _test_split(X. _scaled, y, test_size=0.3, random _state=42) #
+Split the data into training and testing sets with 30% of the data used for testing and a fixed random
+seed for reproducibility
+# Initialize and train the SVM model with balanced class weights
+model = SVC(kernel=rbf, gamma='scale', C-1.0, class_weight=balanced', probability-True) #
+Create an instance of SVC with radial basis function kernel, automatic gamma sealing, regularization
+parameter C set to 1.0, balanced class weights, and probability estimates enabled
+model.fit(x train, y_train) # Train the SVM model using the training data
+# Make predictions on the test set
+y_pred = model.predict(X_ test) # Use the trained model to predict the labels for the test set
+# Calculate and print accuracy
+accuracy = accuracy_score(y_test, y_pred) # Calculate the accuracy of the predictions
+printf"nAccuracy: (accuracy::4f)*) # Print the accuracy with 4 decimal places
+print("inConfusion Matrix:")
+cm = confusion_matrixy_test, _pred) # Compute the confusion matrix to evaluate the performance
+of the classification
+print(cm) # Print the confusion matrix
+precision - precision score(y_test, y_pred, average-None) #Calculate precision scores for each
+class, without averaging
+recall = recall_score(y_test, y_pred, average-None) # Calculate recall scores for each class, without
+averaging
+fl = fl _score(y_test, Y_pred, average-None) # Calculate F1 scores for each class, without averaging
+print("inPrecision for each class:")
+for i, p in enumerate(precision): # Iterate through each class's precision score
+print(f"Class {i}: {p:.4f}") # Print the precision score for each class with 4 decimal places
+print("inRecall for each class:")
+for i, r in enumerate(recall): # Iterate through each class's recall score
+print(f"Class {i): (r:.4f)") # Print the recall score for each class with 4 decimal places
+print("inF1 Score for each class:")
+for i, fin enumerate(fl): # Iterate through each class's F1 score
+print(f"Class {i}: {f:.4f,") # Print the F1 score for each class with 4 decimal plac
+
+
