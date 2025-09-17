@@ -1,12 +1,4 @@
 . Program to Implement 8-Puzzle problem using Python.
-Procedure
-1. Flatten the board into a tuple (immutable, so it can be stored in a dictionary).
-•2. Store this tuple in a dictionary (dict) where the value is the number of moves taken to reach it.
-3. Perform BFS level by level:
-• Expand all nodes at depth cnt.
-• Generate all valid next moves by sliding the 0 (blank space).
-• If the goal state (0,1,2,3,4,5,6,7,8) is found → return the number of moves.
-4. If no solution exists, return -1.
 Program
 class Solution:
    def solve(self, board):
@@ -71,7 +63,6 @@ class Solution:
        return results
  
  
-# Test
 ob = Solution()
 matrix = [
    [3, 1, 2],
@@ -80,22 +71,7 @@ matrix = [
 ]
 print(ob.solve(matrix))  # prints minimum number of moves
  
- 
-5. Program to Implement Water-Jug problem using Python.
-Procedure
-1.  Start from the initial state (0,0) → both jugs empty.
-2. Use a queue (FIFO) to store states and their paths.
-3.  Maintain a visited set to avoid repeating states.
-4.  At each step, generate all possible states by applying the operations:
-• Fill Jug1
-• Fill Jug2
-• Empty Jug1
-• Empty Jug2
-• Pour Jug1 → Jug2
-• Pour Jug2 → Jug1
-5.  If at any state, the amount of water in Jug1 or Jug2 equals the target d, stop and return the path.
-6.  If the queue becomes empty, it means no solution exists.
- 
+# Program to Implement Water-Jug problem using Python.
 Program
 from collections import deque
  
