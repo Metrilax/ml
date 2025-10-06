@@ -1,0 +1,207 @@
+6.logistic regression
+
+import pandas as pd
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.linear_model import LogisticRegression
+from sklearn.metrics import accuracy_score, confusion_matrix, classification_report, roc_curve, roc_auc_score
+import matplotlib.pyplot as plt
+
+# Load dataset
+cancer = load_breast_cancer()
+X = pd.DataFrame(cancer.data, columns=cancer.feature_names)
+y = cancer.target
+
+print("First few rows of breast cancer dataset:")
+print(X.head())
+
+print("\nTarget Variable Distribution:")
+print(pd.Series(y).value_counts())
+
+# Split dataset
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Feature scaling
+scaler = StandardScaler()
+X_train_scaled = scaler.fit_transform(X_train)
+X_test_scaled = scaler.transform(X_test)
+
+# Model training
+model = LogisticRegression(max_iter=10000)
+model.fit(X_train_scaled, y_train)
+
+# Predictions
+y_pred = model.predict(X_test_scaled)
+y_pred_prob = model.predict_proba(X_test_scaled)[:, 1]
+
+# Evaluation
+print("\nModel Evaluation:")
+print("Accuracy:", accuracy_score(y_test, y_pred))
+
+print("\nConfusion Matrix:\n", confusion_matrix(y_test, y_pred))
+print("\nClassification Report:\n", classification_report(y_test, y_pred))
+
+# ROC Curve
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_prob)
+auc = roc_auc_score(y_test, y_pred_prob)
+
+plt.figure()
+plt.plot(fpr, tpr, color='darkorange', lw=2, label=f'ROC curve (area = {auc:.3f})')
+plt.plot([0, 1], [0, 1], color='navy', lw=2, linestyle='--')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate')
+plt.ylabel('True Positive Rate')
+plt.title('Receiver Operating Characteristic')
+plt.legend(loc="lower right")
+plt.show()
+
+
+7.decision tree
+from sklearn.datasets import load_breast_cancer
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn import tree
+import matplotlib.pyplot as plt
+
+data = load_breast_cancer()
+X = data.data
+y = data.target
+print("Feature name: ", data.feature_names)
+print("Class name: ", data.target_names)
+print("First two rows of the dataset: \n", X[:2])
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+clf = DecisionTreeClassifier()
+clf.fit(X_train, y_train)
+
+y_pred = clf.predict(X_test)
+
+accuracy = accuracy_score(y_test, y_pred)
+
+print("--- Model Evaluation ---")
+print("Accuracy: ", accuracy)
+print("Classification Report:")
+print(classification_report(y_test, y_pred, target_names=data.target_names))
+
+
+plt.figure(figsize=(20, 10))
+tree.plot_tree(
+    clf,
+    feature_names=data.feature_names,
+    class_names=data.target_names,
+    filled=True )
+plt.show()
+
+
+8.k- means
+import pandas as pd
+from sklearn.cluster import KMeans
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import load_wine
+from sklearn.metrics import (
+    completeness_score,
+    silhouette_score,
+    calinski_harabasz_score
+)
+
+wine = load_wine()
+
+X = pd.DataFrame(wine.data, columns=wine.feature_names)
+
+y = wine.target
+
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
+
+k = 3
+
+kmeans = KMeans(
+    n_clusters=k,
+    n_init=10,         
+    random_state=42    
+)
+kmeans.fit(X_scaled)
+Centroids = kmeans.cluster_centers_
+labels = kmeans.labels_
+
+completeness_avg = completeness_score(y, labels)
+
+silhouette_avg = silhouette_score(X_scaled, labels)
+
+calinski_harabasz_avg = calinski_harabasz_score(X_scaled, labels)
+
+print(f"Silhouette Coefficient: {silhouette_avg:.2f}")
+
+print(f"Calinski-Harabasz Index: {calinski_harabasz_avg:.2f}")
+
+print(f"Completeness Score: {completeness_avg:.2f}")
+
+
+9.
+hierarchical tree
+import pandas as pd
+from sklearn.preprocessing import StandardScaler
+from sklearn.datasets import load_iris
+from sklearn.metrics import (
+    completeness_score,
+    silhouette_score,
+    calinski_harabasz_score
+)
+import scipy.cluster.hierarchy as sch
+import matplotlib.pyplot as plt
+import numpy as np 
+iris = load_iris()
+X = pd.DataFrame(iris.data, columns=iris.feature_names)
+y = iris.target
+
+data = pd.concat([X, pd.Series(y, name='species')], axis=1)
+
+sample = data.groupby('species').apply(
+    lambda x: x.sample(10, random_state=42),
+    include_groups=False 
+).reset_index(drop=True)
+
+X_sample = sample.drop(columns='species')
+y_sample = sample['species']
+
+scaler = StandardScaler()
+
+X_sample_scaled = scaler.fit_transform(X_sample)
+
+linked = sch.linkage(X_sample_scaled, method='ward')
+
+num_clusters = 3
+
+labels = sch.fcluster(linked, num_clusters, criterion='maxclust')
+completeness = completeness_score(y_sample, labels)
+
+silhouette = silhouette_score(X_sample_scaled, labels)
+
+calinski_harabasz = calinski_harabasz_score(X_sample_scaled, labels)
+
+print("--- Hierarchical Clustering Results ---")
+print(f"Number of Cluster: {num_clusters}")
+print(f"Completeness Score: {completeness:.2f}")
+print(f"Silhouette Score: {silhouette:.2f}")
+print(f"Calinski-Harabasz Score: {calinski_harabasz:.2f}")
+
+species_colors_map = plt.cm.get_cmap('Dark2', len(np.unique(y_sample)))
+species_colors = [species_colors_map(i) for i in y_sample]
+
+plt.figure(figsize=(12, 8))
+
+dendrogram = sch.dendrogram(
+    linked,
+    orientation='top',
+    labels=y_sample.values.astype(str), # Use true species as labels
+    distance_sort='descending',
+    show_leaf_counts=True,
+)
+
+plt.title('Dendrogram of Hierarchical Clustering on Sample')
+plt.xlabel('Sample Index')
+plt.ylabel('Euclidean Distance')
