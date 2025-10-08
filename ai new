@@ -1,0 +1,133 @@
+6.
+from itertools import permutations
+def tsp_simple(graph):
+n = len(graph)
+min_dist = float('inf')
+for path in permutations(range(1, n)):
+total = graph[0][path[0]]
+for i in range(len(path)-1):
+total += graph[path[i]][path[i+1]]
+total += graph[path[-1]][0]
+min_dist = min(min_dist, total)
+return min_dist
+graph = [
+[0, 10, 15, 20],
+[10, 0, 35, 25],
+[15, 35, 0, 30],
+[20, 25, 30, 0]
+print(f"Shortest route distance: {tsp_simple(graph)}")
+]
+7.
+def hanoi_simple(n, src, dest, aux):
+if n > 0:
+hanoi_simple(n-1, src, aux, dest)
+print(f"Move disk {n} from {src} to {dest}")
+hanoi_simple(n-1, aux, dest, src)
+for disks in [1, 2, 3]:
+print(f"\n{disks} disk(s):")
+hanoi_simple(disks, 'A', 'C', 'B')
+8.
+class Monkey:
+def __init__(self):
+self.height = 0
+self.position = None
+self.has_banana = False
+class World:
+def __init__(self):
+self.positions = ["A", "B", "C"]
+self.monkey = Monkey()
+self.box_position = "B"
+self.tree_position = "C"
+def solve(self):
+print("1. Monkey moves to position B")
+self.monkey.position = "B"
+print("2. Monkey pushes box to position C")
+self.monkey.position = "C"
+self.box_position = "C"
+print("3. Monkey climbs the box")
+self.monkey.height = 2
+print("4. Monkey takes the banana!")
+self.monkey.has_banana = True
+return "Success! Monkey got the banana."
+world = World()
+world.monkey.position = "A"
+result = world.solve()
+print(f"\nResult: {result}")
+9.
+import math
+import random
+class AlphaBetaPruning:
+def __init__(self, max_depth=5):
+self.max_depth = max_depth
+self.nodes_evaluated = 0
+def minimax(self, depth, node_index,
+maximizing_player,values, alpha, beta):
+self.nodes_evaluated += 1
+if depth == self.max_depth:
+return values[node_index]
+if maximizing_player:
+max_eval = -math.inf
+for i in range(2):
+eval = self.minimax(depth + 1, node_index * 2 +
+i, False, values, alpha, beta)
+max_eval = max(max_eval, eval)
+alpha = max(alpha, eval)
+if beta <= alpha:
+break
+return max_eval
+else:
+min_eval = math.inf
+for i in range(2):
+eval = self.minimax(depth + 1, node_index * 2 +
+i,
+True, values, alpha, beta)
+min_eval = min(min_eval, eval)
+beta = min(beta, eval)
+if beta <= alpha:
+break
+return min_eval
+def basic_example():
+abp = AlphaBetaPruning(max_depth=3)
+values = [3, 5, 6, 9, 1, 2, 0, -1, 10, 12, 14, 15, 8, 7, 4, 3]
+print("Game Tree Values:", values)
+print("Max Depth:", abp.max_depth)
+result = abp.minimax(0, 0, True, values, -math.inf,
+math.inf)
+print(f"Optimal value: {result}")
+print(f"Nodes evaluated: {abp.nodes_evaluated}")
+basic_example()
+10.
+def solve_n_queens(n=8):
+def is_safe(board, row, col):
+for i in range(col):
+if board[row][i] == 1:
+return False
+for i, j in zip(range(row, -1, -1), range(col, -1, -1)):
+if board[i][j] == 1:
+return False
+for i, j in zip(range(row, n), range(col, -1, -1)):
+if board[i][j] == 1:
+return False
+return True
+def solve(col, board, solutions):
+if col >= n:
+solutions.append([row[:] for row in board])
+return
+for row in range(n):
+if is_safe(board, row, col):
+board[row][col] = 1
+solve(col + 1, board, solutions)
+board[row][col] = 0
+board = [[0] * n for _ in range(n)]
+solutions = []
+solve(0, board, solutions)
+return solutions
+def print_solution(solution):
+for row in solution:
+print(' '.join('Q' if cell == 1 else '.' for cell in row))
+print()
+solutions = solve_n_queens(8)
+print(f"Number of solutions for 8 queens:
+{len(solutions)}")
+print("\nFirst solution:")
+print_solution(solutions[0])
